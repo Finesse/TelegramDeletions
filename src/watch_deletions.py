@@ -1,5 +1,3 @@
-# (in venv): python3 src/watch_deletions.py
-
 import os
 import asyncio
 import json

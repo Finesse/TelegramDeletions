@@ -1,5 +1,3 @@
-# (in venv): python3 src/list_dialogs.py
-
 import asyncio
 from client import make_client
 from telethon.tl.custom import Dialog
