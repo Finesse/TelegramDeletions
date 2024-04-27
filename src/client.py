@@ -5,5 +5,5 @@ from telethon import TelegramClient
 API_ID = 1000000
 API_HASH = 'abababababababababababababababab'
 
-def makeClient() -> TelegramClient:
+def make_client() -> TelegramClient:
     return TelegramClient('data/telegram', API_ID, API_HASH)
