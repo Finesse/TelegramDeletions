@@ -2,10 +2,11 @@
 
 import os
 import asyncio
+import json
 from telethon import events
 from telethon.tl import types, custom
 from client import make_client
-from util import get_message_id, get_deleted_message_ids
+from util import get_message_id, get_deleted_message_ids, name_peer
 
 messagesDirectory = 'data/messages'
 
@@ -26,8 +27,13 @@ async def handle_new_message(event: events.NewMessage.Event):
 
     with open(f'{messageDirectory}/event.txt', 'w') as file:
         file.write(str(event))
-    with open(f'{messageDirectory}/message.txt', 'w') as file:
-        file.write(message.message or '')
+    with open(f'{messageDirectory}/message.json', 'w') as file:
+        json.dump({
+            'localId': message.id,
+            'chatName': name_peer(message.peer_id),
+            'fromName': name_peer(message.from_id),
+            'message': message.message or '',
+        }, file)
 
     if message.media is not None:
         await client.download_media(message.media, f'{messageDirectory}/media')
@@ -45,16 +51,19 @@ async def handle_message_deleted(event: events.MessageDeleted.Event):
             print(f'Deleted message {messageId} was not saved. Most likely it is not from a watched chat.')
             continue
 
-        with open(f'{messageDirectory}/message.txt', 'r') as file:
-            message = file.read()
+        with open(f'{messageDirectory}/message.json', 'r') as file:
+            message = json.load(file)
 
-        await client.send_message(chatToOutput, f'Message #{messageId}:\n\n{message}')
+        await client.send_message(
+            chatToOutput,
+            f'Message #{message['localId']} in {message['chatName']} from {message['fromName']}:\n\n{message['message']}',
+        )
         print(f'Posted the message {messageId} to the output chat')
 
         for filename in os.listdir(messageDirectory):
             if filename.startswith('media'):
                 mediaPath = messageDirectory + '/' + filename
-                await client.send_message(chatToOutput, f'An attachment to the message {messageId}', file=mediaPath)
+                await client.send_message(chatToOutput, f'The attachment to the message #{message['localId']}', file=mediaPath)
                 print(f'Posted the media of the message {messageId} to the output chat')
                 break
 
