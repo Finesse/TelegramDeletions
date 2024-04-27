@@ -1,0 +1,14 @@
+[Unit]
+Description=Watch message deletions in Telegram
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=%h/telegram_deletions
+ExecStart=/bin/bash -c "source .venv/bin/activate && python3 -u src/watch_deletions.py"
+
+[Install]
+WantedBy=default.target
