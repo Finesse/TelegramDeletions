@@ -7,14 +7,9 @@ from telethon import events
 from telethon.tl import types, custom
 from client import make_client
 from util import get_message_id, get_deleted_message_ids, name_peer
+from config import dataDirectory, chatsToWatch, chatToOutput
 
-messagesDirectory = 'data/messages'
-
-chatsToWatch = [
-    1000000000
-]
-chatToOutput = types.InputPeerChannel(channel_id=2000000000, access_hash=29075892034895839)
-
+messagesDirectory = f'{dataDirectory}/messages'
 client = make_client()
 
 @client.on(events.NewMessage(chats=chatsToWatch))
@@ -68,5 +63,6 @@ async def handle_message_deleted(event: events.MessageDeleted.Event):
                 break
 
 client.start()
-print('Ready')
+print(f'Watching chats {', '.join(map(str, chatsToWatch))}')
+print(f'Deleted messages will be posted to {chatToOutput}')
 client.run_until_disconnected()

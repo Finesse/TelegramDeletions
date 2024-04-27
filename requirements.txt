@@ -3,4 +3,5 @@
 # python3 -m pip install --upgrade pip
 # python3 -m pip install -r requirements.txt
 
-telethon==1.30.3
+python-dotenv==1.0.*
+telethon==1.30.*
