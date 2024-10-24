@@ -37,8 +37,8 @@ Configure the app by editing the `.env` file (or provide the environment variabl
 - `TELEGRAM_APP_ID` — the application id
 - `TELEGRAM_APP_HASH` — the application hash
 - `APP_DATA_DIRECTORY` (optional) — path to the directory to store data (cookie, messages) at.
-  The running application must have permissions to read and write there.
-  The default it `data`.
+  The running application must have permissions to read and write in the directory.
+  The default is `data`.
 - Ignore the chat options for now
 
 List your dialogs to see their ids by running:
@@ -54,7 +54,7 @@ Configure `.env` again:
 - `APP_CHATS_TO_WATCH` — id of the chat(s) to watch (integer).
     If multiple, must be separated by `,`.
     You can find them after `Chat id:` in the dialog list.
-- `APP_CHAT_TO_OUTPUT` — input entity of the chat to post deleted messages (Python function call string).
+- `APP_CHAT_TO_OUTPUT` — input entity of the chat to post deleted messages (a Python function call string).
     Copy the part after `Input entity:` in the dialog list.
 
 ## Usage
@@ -76,7 +76,7 @@ Keep it running. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop watching.
 This section tells how to configure the app as a Linux service so that the app always runs.
 
 Connect to the server via SSH as a regular user.
-It must have sudo access for a single command.
+It must have a sudo access to execute one command.
 Install and configure the app following the above steps.
 Make sure you've called `python3 src/list_dialogs.py` on the server,
 otherwise the service will stuck on the Telegram sign-in dialog.
